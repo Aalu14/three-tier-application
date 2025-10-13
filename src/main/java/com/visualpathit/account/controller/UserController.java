@@ -32,13 +32,13 @@ public class UserController {
     private ProducerService producerService;
 
     @GetMapping("/registration")
-    public String registration(Model model) {
+    public String registrationForm(Model model) {
         model.addAttribute("userForm", new User());
         return "registration";
     }
 
     @PostMapping("/registration")
-    public String registration(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, Model model) {
+    public String registerUser(@ModelAttribute("userForm") @Valid User userForm, BindingResult bindingResult, Model model) {
         userValidator.validate(userForm, bindingResult);
 
         if (bindingResult.hasErrors()) {
@@ -54,7 +54,7 @@ public class UserController {
         return "redirect:/welcome";
     }
 
-    @GetMapping("/")
+    @GetMapping("/login")
     public String login(Model model, @RequestParam(value = "error", required = false) String error,
                         @RequestParam(value = "logout", required = false) String logout) {
         if (error != null) {

@@ -1,0 +1,5 @@
+# Created at 2025-10-11T00:29:22.145
+Boot Manifest-JAR contains absolute paths in classpath 'D:\my softwares\angular-food-conservation\vprofile-project\target\test-classes'
+Hint: <argLine>-Djdk.net.URLClassPath.disableClassPathURLCheck=true</argLine>
+'other' has different root
+

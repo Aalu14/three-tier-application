@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  db:
+    image: mysql/mysql-server:8.0
+    container_name: db01
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: MySQL
+      MYSQL_USER: root
+      MYSQL_PASSWORD: 1234
+    volumes:
+      - dbdata:/var/lib/mysql
+      - ./src/main/resources/accountsdb.sql:/docker-entrypoint-initdb.d/accountsdb.sql
+    networks:
+      - vpronet
+
+  memcache:
+    image: memcached:1.6-alpine # Using Alpine variant
+    container_name: mc01
+    ports:
+      - "11211:11211"
+    networks:
+      - vpronet
+
+  rabbitmq:
+    image: rabbitmq:3.12-management-alpine # Using Alpine variant with management plugin
+    container_name: rmq01
+    ports:
+      - "5672:5672"
+      - "15672:15672" # Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: test
+      RABBITMQ_DEFAULT_PASS: test
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 5s
+      timeout: 2s
+      retries: 5
+    networks:
+      - vpronet
+
+  vproapp:
+    build: .
+    container_name: vproapp01
+    ports:
+      - "8081:8080"
+    networks:
+      - vpronet
+    depends_on:
+      - db
+      - memcache
+      - rabbitmq
+
+volumes:
+  dbdata:
+
+networks:
+  vpronet:
+
+

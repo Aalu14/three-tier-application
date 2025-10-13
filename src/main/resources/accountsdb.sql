@@ -52,6 +52,23 @@ CREATE TABLE `user` (
   `username` varchar(255) DEFAULT NULL,
   `userEmail` varchar(255) DEFAULT NULL,
   `password` varchar(255) DEFAULT NULL,
+  `profileImg` varchar(255) DEFAULT NULL,
+  `profileImgPath` varchar(255) DEFAULT NULL,
+  `dateOfBirth` varchar(255) DEFAULT NULL,
+  `fatherName` varchar(255) DEFAULT NULL,
+  `motherName` varchar(255) DEFAULT NULL,
+  `gender` varchar(255) DEFAULT NULL,
+  `maritalStatus` varchar(255) DEFAULT NULL,
+  `permanentAddress` varchar(255) DEFAULT NULL,
+  `tempAddress` varchar(255) DEFAULT NULL,
+  `primaryOccupation` varchar(255) DEFAULT NULL,
+  `secondaryOccupation` varchar(255) DEFAULT NULL,
+  `skills` varchar(255) DEFAULT NULL,
+  `phoneNumber` varchar(255) DEFAULT NULL,
+  `secondaryPhoneNumber` varchar(255) DEFAULT NULL,
+  `nationality` varchar(255) DEFAULT NULL,
+  `language` varchar(255) DEFAULT NULL,
+  `workingExperience` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 /*!40101 SET CHARACTER_SET_CLIENT = @saved_cs_client */;
@@ -62,7 +79,7 @@ CREATE TABLE `user` (
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
-INSERT INTO `user` VALUES (4,'admin_vp','admin@visualpathit.com','$2a$11$DSEIKJNrgPjG.iCYUwErvOkREtC67mqzQ.ogkZbc/KOW1OPOpZfY6');
+INSERT INTO `user` VALUES (4,'admin_vp','admin@visualpathit.com','$2a$11$DSEIKJNrgPjG.iCYUwErvOkREtC67mqzQ.ogkZbc/KOW1OPOpZfY6',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
