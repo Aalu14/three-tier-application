@@ -18,7 +18,7 @@ services:
       - vpronet
 
   memcache:
-    image: memcached:1.6-alpine # Using Alpine variant
+    image: memcached:1.6-alpine 
     container_name: mc01
     ports:
       - "11211:11211"
@@ -26,11 +26,11 @@ services:
       - vpronet
 
   rabbitmq:
-    image: rabbitmq:3.12-management-alpine # Using Alpine variant with management plugin
+    image: rabbitmq:3.12-management-alpine 
     container_name: rmq01
     ports:
       - "5672:5672"
-      - "15672:15672" # Management UI
+      - "15672:15672" 
     environment:
       RABBITMQ_DEFAULT_USER: test
       RABBITMQ_DEFAULT_PASS: test
@@ -43,16 +43,25 @@ services:
       - vpronet
 
   vproapp:
-    build: .
+    image: 650576187890.dkr.ecr.ap-south-1.amazonaws.com/three-tier-application
     container_name: vproapp01
     ports:
-      - "8081:8080"
+      - "9000:8080"
     networks:
       - vpronet
     depends_on:
       - db
       - memcache
       - rabbitmq
+
+  jenkins:
+    image: jenkins/jenkins:lts-alpine
+    container_name: jenkins
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    networks:
+      - vpronet
 
 volumes:
   dbdata:
