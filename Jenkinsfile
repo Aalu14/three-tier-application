@@ -20,13 +20,13 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                sh "docker build -t ${ECR_REPO}:${IMAGE_TAG} ."
+                bat "docker build -t ${ECR_REPO}:${IMAGE_TAG} ."
             }
         }
 
         stage('Login & Push to ECR') {
             steps {
-                sh """
+                bat """
                     aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
                     docker push ${ECR_REPO}:${IMAGE_TAG}
                 """
@@ -36,7 +36,7 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                 sshagent (credentials: ["${SSH_KEY}"]) {
-                    sh """
+                    bat """
                         ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} "
                             aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO} &&
                             cd /home/ubuntu/vprofile-project &&
