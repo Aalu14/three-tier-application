@@ -36,7 +36,6 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
-                sshagent (credentials: ["${SSH_KEY}"]) {
                     bat """
                     echo Deploying to EC2...
                     plink -i "${PEM_PATH}" -ssh ${EC2_USER}@${EC2_HOST} ^
@@ -45,7 +44,7 @@ pipeline {
                      docker compose pull && \
                      docker compose up -d"
                 """
-                }
+                
             }
         }
     }
