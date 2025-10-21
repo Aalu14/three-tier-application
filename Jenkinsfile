@@ -8,7 +8,7 @@ pipeline {
         EC2_USER = 'ubuntu'
         EC2_HOST = '3.109.184.223'  
         SSH_KEY = 'ec2-key' 
-        PEM_PATH ='D:\my softwares\three-tier-app-key-pair-.pem'
+        PEM_PATH ='D:\\my softwares\\three-tier-app-key-pair-.pem'
         }
 
     stages {
