@@ -37,12 +37,13 @@ pipeline {
         stage('Deploy to EC2') {
             steps {
                     bat """
-                    echo Deploying to EC2...
-                    plink -i "${PEM_PATH}" -ssh ${EC2_USER}@${EC2_HOST} ^
-                    "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO} && \
-                     cd /home/ubuntu/vprofile-project && \
-                     docker compose pull && \
-                     docker compose up -d"
+                      echo Deploying to EC2...
+                      set PATH=%PATH%;C:\\Windows\\System32\\OpenSSH\\
+                      ssh -i "D:/my softwares/three-tier-app-key-pair-.pem" -o StrictHostKeyChecking=no ubuntu@3.109.184.223 ^
+                           "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin 650576187890.dkr.ecr.ap-south-1.amazonaws.com/three-tier-application && 
+                            cd /home/ubuntu/vprofile-project && 
+                            docker compose pull && 
+                            docker compose up -d"
                 """
                 
             }
