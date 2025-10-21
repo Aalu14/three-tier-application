@@ -7,7 +7,8 @@ pipeline {
         IMAGE_TAG = "vprofile-${env.BUILD_NUMBER}"
         EC2_USER = 'ubuntu'
         EC2_HOST = '3.109.184.223'  
-        SSH_KEY = 'ec2-key'     
+        SSH_KEY = 'ec2-key' 
+        PEM_PATH ='D:\my softwares\three-tier-app-key-pair-.pem'
         }
 
     stages {
@@ -37,13 +38,13 @@ pipeline {
             steps {
                 sshagent (credentials: ["${SSH_KEY}"]) {
                     bat """
-                        ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} "
-                            aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO} &&
-                            cd /home/ubuntu/vprofile-project &&
-                            docker compose pull &&
-                            docker compose up -d
-                        "
-                    """
+                    echo Deploying to EC2...
+                    plink -i "${PEM_PATH}" -ssh ${EC2_USER}@${EC2_HOST} ^
+                    "aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO} && \
+                     cd /home/ubuntu/vprofile-project && \
+                     docker compose pull && \
+                     docker compose up -d"
+                """
                 }
             }
         }
