@@ -38,7 +38,6 @@ pipeline {
             steps {
                     bat """
                       echo Deploying to EC2...
-                      set PATH=%PATH%;C:\\Windows\\System32\\OpenSSH\\
                       ssh -i "${PEM_PATH}" -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} ^
                       "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin ${ECR_REPO} && ^
                        cd /home/ubuntu/vprofile-project && ^
