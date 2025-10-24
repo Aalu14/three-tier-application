@@ -51,11 +51,11 @@ pipeline {
                       echo "Logging into ECR..."
                       aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO} &&
                       echo "Navigating to project directory..."
-                      cd /home/ubuntu/vprofile-project 
+                      cd /home/ubuntu/three-tier-application
                       echo "Pulling latest image..."
                       docker compose pull 
                       echo "Starting containers..."
-                      docker compose up -d"
+                      docker compose up -d
                       echo "Checking container status..."
                       docker compose ps
                       echo "Deployment completed successfully!"
