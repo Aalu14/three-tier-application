@@ -8,7 +8,6 @@ pipeline {
         EC2_USER = 'ubuntu'
         EC2_HOST = '3.109.184.223'  
         SSH_KEY = 'ec2-key' 
-        PEM_PATH ='D:/my softwares/three-tier-app-key-pair.pem'
         }
 
     stages {
@@ -32,9 +31,16 @@ pipeline {
                     string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
                 ]) {
                  sh """
-                    aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
-                    docker push ${ECR_REPO}:${IMAGE_TAG}
-                """
+                        export AWS_ACCESS_KEY_ID=\${AWS_ACCESS_KEY_ID}
+                        export AWS_SECRET_ACCESS_KEY=\${AWS_SECRET_ACCESS_KEY}
+                        export AWS_DEFAULT_REGION=${AWS_REGION}
+                        
+                        echo "Logging into ECR..."
+                        aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
+                        
+                        echo "Pushing image to ECR..."
+                        docker push ${ECR_REPO}:${IMAGE_TAG}
+                    """
             }
         }
         }
