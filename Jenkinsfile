@@ -25,13 +25,18 @@ pipeline {
             }
         }
 
-        stage('Login & Push to ECR') {
+        stage('Login & Push to ECR'){
             steps {
+                withCredentials([
+                    string(credentialsId: 'aws-access-key-id', variable: 'AWS_ACCESS_KEY_ID'),
+                    string(credentialsId: 'aws-secret-access-key', variable: 'AWS_SECRET_ACCESS_KEY')
+                ]) {
                  sh """
                     aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
                     docker push ${ECR_REPO}:${IMAGE_TAG}
                 """
             }
+        }
         }
 
         stage('Deploy to EC2') {
