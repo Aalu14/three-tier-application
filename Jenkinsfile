@@ -48,6 +48,13 @@ pipeline {
                     sh """
                       echo Deploying to EC2...
                       ssh -i \${SSH_KEY_FILE} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} bash << 'ENDSSH'
+                      echo "Connected to EC2: \$(hostname)"
+                      echo "Installing dependencies..."
+                      sudo apt update -y
+                      sudo apt install -y git docker.io docker-compose awscli
+                      echo "Cloning fresh project from GitHub..."
+                      git clone https://github.com/Aalu14/three-tier-application.git /home/ubuntu/three-tier-application
+                      cd /home/ubuntu/three-tier-application
                       echo "Logging into ECR..."
                       aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO} &&
                       echo "Navigating to project directory..."
@@ -66,4 +73,6 @@ pipeline {
     }
 }
 }
+
+
             
