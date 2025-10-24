@@ -43,10 +43,14 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
+                withCredentials([sshUserPrivateKey(credentialsId: 'ec2-key', keyFileVariable: 'SSH_KEY_FILE')]) {
+
                     sh """
                       echo Deploying to EC2...
-                      ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} "
+                      ssh -i \${SSH_KEY_FILE} -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} << 'ENDSSH'
+                      echo "Logging into ECR..."
                       aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO} &&
+                      echo "Navigating to project directory..."
                       cd /home/ubuntu/vprofile-project &&
                       docker compose pull &&  docker compose up -d"
                 """
@@ -55,3 +59,5 @@ pipeline {
         }
     }
 }
+}
+            
