@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         AWS_REGION = 'ap-south-1'
-        ECR_REPO = '650576187890.dkr.ecr.ap-south-1.amazonaws.com/three-tier-application:vprofile'
+        ECR_REPO = '650576187890.dkr.ecr.ap-south-1.amazonaws.com/three-tier-application'
         IMAGE_TAG = "vprofile-${env.BUILD_NUMBER}"
         EC2_USER = 'ubuntu'
         EC2_HOST = '3.109.184.223'  
