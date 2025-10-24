@@ -43,7 +43,7 @@ services:
       - vpronet
 
   vproapp:
-    image: 650576187890.dkr.ecr.ap-south-1.amazonaws.com/three-tier-application
+    image: 650576187890.dkr.ecr.ap-south-1.amazonaws.com/three-tier-application:vprofile
     container_name: vproapp01
     ports:
       - "9000:8080"

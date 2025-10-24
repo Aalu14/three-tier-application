@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         AWS_REGION = 'ap-south-1'
-        ECR_REPO = '650576187890.dkr.ecr.ap-south-1.amazonaws.com/three-tier-application'
+        ECR_REPO = '650576187890.dkr.ecr.ap-south-1.amazonaws.com/three-tier-application:vprofile'
         IMAGE_TAG = "vprofile-${env.BUILD_NUMBER}"
         EC2_USER = 'ubuntu'
         EC2_HOST = '3.109.184.223'  
@@ -21,13 +21,13 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
-                bat "docker build -t ${ECR_REPO}:${IMAGE_TAG} ."
+                 sh "docker build -t ${ECR_REPO}:${IMAGE_TAG} ."
             }
         }
 
         stage('Login & Push to ECR') {
             steps {
-                bat """
+                 sh """
                     aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO}
                     docker push ${ECR_REPO}:${IMAGE_TAG}
                 """
@@ -36,13 +36,12 @@ pipeline {
 
         stage('Deploy to EC2') {
             steps {
-                    bat """
+                    sh """
                       echo Deploying to EC2...
-                      ssh -i "${PEM_PATH}" -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} ^
-                      "aws ecr get-login-password --region ap-south-1 | docker login --username AWS --password-stdin ${ECR_REPO} && ^
-                       cd /home/ubuntu/vprofile-project && ^
-                       docker compose pull && ^
-                       docker compose up -d"
+                      ssh -o StrictHostKeyChecking=no ${EC2_USER}@${EC2_HOST} "
+                      aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${ECR_REPO} &&
+                      cd /home/ubuntu/vprofile-project &&
+                      docker compose pull &&  docker compose up -d"
                 """
                 
             }
